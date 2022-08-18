@@ -1,0 +1,30 @@
+import requests
+import os
+url = 'https://fanyi.baidu.com/v2transapi?from=en&to=zh' #网址
+word = 'fame'
+data = {
+    'from': 'en',
+    'to': 'zh',
+    'query': word,
+    'transtype': 'realtime',
+    'simple_means_flag': 3
+    # 'sign': '749289.1019352',
+    # 'token': '4b0704a2de3d3e8c10d51039bb701c6e',
+    # 'domain': 'common',
+}
+response = requests.post(url,data=data)
+data = response.json()
+print(data)
+means = data['dict_result']['simple_means']['symbols'][0]['parts']
+if not os.path.exists(word):
+    os.makedirs(word)
+file_handler = open('%s.txt' % word,'w')
+for item in means:
+    file_handler.write(item['part']+''.join['means']+'\n')
+file_handler.close()
+
+mp3_url = 'https://fanyi.baidu.com/gettts?lan=en&text=fame&spd=3&source=web'
+mp3_response = requests.get(mp3_url)
+mp3_data=mp3_response.content
+with open('%s.mp3'%word,'wb') as f:
+    f.write(mp3_data)

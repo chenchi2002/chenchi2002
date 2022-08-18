@@ -1,0 +1,28 @@
+import urllib.request
+import urllib.parse  # 解析器，将键值对按utf-8或其他形式解析
+response = urllib.request.urlopen("http://www.baidu.com")
+print(response.read().decode("utf-8"))
+# 第二行的输出是对获取到的对象response的信息-网页源码进行utf-8的解码
+data = bytes(urllib.parse.urlencode({"hello": "world"}), encoding='utf-8')  # 一般模拟用户登录时使用此种方式，在{}内加上cookie内容
+response = urllib.request.urlopen("https://baidu.com", data=data)
+print(response.read().decode("utf-8"))
+response = urllib.request.urlopen("https://baidu.com", timeout=0.1)
+print(response.read().decode("utf-8"))
+# 利用异常处理结束循环或者停止爬取该网页，向其他网页发送get请求！！！
+# try:
+#     response = urllib.request.urlopen("http://www.baidu.com",timeout=0.1)
+#     print(response.read().decode("utf-8"))
+# except urllib.error.URLError as e:
+#     print("time out!")
+response = urllib.request.urlopen("http://www.baidu.com")
+print(response.status)   # 返回状态码-200、404、418等
+print(response.getheaders())  # 返回头部所有信息
+# 访问反爬的网址
+url = "http://www.douban.com"
+headers = {
+"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36"
+}
+req = urllib.request.Request(url=url, headers=headers, method="POST")  # req是请求对象而非响应对象
+response = urllib.request.urlopen(req)
+html = response.read().decode("utf-8")
+print(html)
